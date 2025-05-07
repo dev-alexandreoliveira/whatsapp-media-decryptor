@@ -24,3 +24,52 @@ Você envia a `media_key`, a `media_url` e o tipo de mídia (`mimetype`) e receb
   "media_key": "base64-da-chave-decriptografada",
   "mimetype": "image/jpeg"
 }
+
+🧠 Suporta:
+audio/ogg (áudios do WhatsApp)
+
+image/jpeg (fotos comuns)
+
+🛠 Instalação local
+bash
+Copiar
+Editar
+git clone https://github.com/seu-usuario/whatsapp-media-decryptor.git
+cd whatsapp-media-decryptor
+pip install -r requirements.txt
+python main.py
+A aplicação ficará disponível em:
+http://localhost:8080/decode-media
+
+☁️ Deploy (Heroku, Railway, EasyPanel)
+Esse projeto já vem com um Procfile:
+
+less
+Copiar
+Editar
+web: python -m flask run --host=0.0.0.0 --port=8080
+Você pode subir com:
+
+Railway.app
+
+Render.com
+
+Heroku
+
+Replit
+
+VPS (Docker opcional)
+
+📁 Arquivos do projeto
+main.py: código principal da API
+
+requirements.txt: dependências
+
+Procfile: comando de execução (para Heroku-like platforms)
+
+📜 Licença
+MIT. Use, adapte, contribua.
+
+💬 Feedback
+Se você usar isso em produção ou quiser melhorar, abra uma issue ou mande um PR!
+
