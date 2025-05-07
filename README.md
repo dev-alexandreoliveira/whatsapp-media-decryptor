@@ -1,6 +1,6 @@
 # WhatsApp Media Decryptor 🔐
 
-API leve e open-source para **descriptografar mídias do WhatsApp** (áudios e imagens) enviadas via Whatsapp.
+API leve e open-source para **descriptografar mídias do WhatsApp** (áudios e imagens) enviadas via WhatsApp (Baileys ou API Oficial).
 
 > Desenvolvido por [Iuri Almeida](https://github.com/iurijalmeida) com apoio do ChatGPT — pronto para ser usado por desenvolvedores.
 
@@ -8,9 +8,9 @@ API leve e open-source para **descriptografar mídias do WhatsApp** (áudios e i
 
 ## 🚀 O que esse projeto faz?
 
-Permite descriptografar arquivos de mídia (áudios `.ogg` e imagens `.jpeg`) protegidos com `media_key`, utilizando o mesmo padrão de criptografia utilizado pelo WhatsApp.
+Permite descriptografar arquivos de mídia (áudios `.ogg` e imagens `.jpeg`) protegidos com `media_key`, utilizando o padrão de criptografia usado pelo WhatsApp.
 
-Você envia a `media_key`, a `media_url` e o tipo de mídia (`mimetype`) e recebe a mídia em base64.
+Você envia a `media_url`, a `media_key` e o tipo MIME (`mimetype`), e recebe a mídia decriptada em base64.
 
 ---
 
@@ -24,8 +24,15 @@ Você envia a `media_key`, a `media_url` e o tipo de mídia (`mimetype`) e receb
   "media_key": "base64-da-chave-decriptografada",
   "mimetype": "image/jpeg"
 }
-
-🧠 Suporta:
+Resposta esperada:
+json
+Copiar
+Editar
+{
+  "success": true,
+  "base64": "iVBORw0KGgoAAAANSUhEUgAA..."
+}
+🧠 Suporta
 audio/ogg (áudios do WhatsApp)
 
 image/jpeg (fotos comuns)
@@ -44,32 +51,28 @@ http://localhost:8080/decode-media
 ☁️ Deploy (Heroku, Railway, EasyPanel)
 Esse projeto já vem com um Procfile:
 
-less
+procfile
 Copiar
 Editar
 web: python -m flask run --host=0.0.0.0 --port=8080
-Você pode subir com:
+Você pode subir facilmente usando:
 
-Railway.app
+Railway
 
-Render.com
+Render
 
 Heroku
 
 Replit
 
-VPS (Docker opcional)
+VPS (com ou sem Docker)
 
-📁 Arquivos do projeto
+📁 Estrutura
 main.py: código principal da API
 
 requirements.txt: dependências
 
-Procfile: comando de execução (para Heroku-like platforms)
+Procfile: instrução de inicialização para ambientes como Railway/Heroku
 
 📜 Licença
-MIT. Use, adapte, contribua.
-
-💬 Feedback
-Se você usar isso em produção ou quiser melhorar, abra uma issue ou mande um PR!
-
+MIT — Use, adapte, contribua e compartilhe com a comunidade.
