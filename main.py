@@ -14,18 +14,19 @@ def decode_media():
 
     media_url = data.get("media_url")
     media_key_b64 = data.get("media_key")
-    mimetype = data.get("mimetype")  # ← Ex: "image/jpeg", "audio/ogg"
+    mimetype = data.get("mimetype")  # Ex: "image/jpeg", "audio/ogg"
 
     if not media_url or not media_key_b64 or not mimetype:
         return jsonify({"error": "Parâmetros 'media_url', 'media_key' e 'mimetype' são obrigatórios"}), 400
 
     try:
+        # Download do arquivo criptografado
         response = requests.get(media_url)
         enc_data = response.content
 
         media_key = b64decode(media_key_b64)
 
-        # Escolher media_type correto
+        # Seleção do tipo de mídia
         if mimetype.startswith("image/"):
             media_type = b'WhatsApp Image Keys'
         elif mimetype.startswith("audio/"):
@@ -33,7 +34,7 @@ def decode_media():
         else:
             return jsonify({"error": f"Tipo de mídia não suportado: {mimetype}"}), 400
 
-        # Derivar chaves
+        # Derivação das chaves
         expanded_key = HKDF(
             master=media_key,
             key_len=112,
@@ -45,13 +46,27 @@ def decode_media():
 
         iv = expanded_key[0:16]
         cipher_key = expanded_key[16:48]
+
+        # Remover MAC (últimos 10 bytes)
+        encrypted_payload = enc_data[:-10]
+        payload_length = len(encrypted_payload)
+
+        # Verificação: payload precisa ser múltiplo de 16
+        if payload_length % 16 != 0:
+            return jsonify({
+                "error": f"O payload criptografado deve ter tamanho múltiplo de 16 após remover o MAC, mas tem {payload_length} bytes."
+            }), 400
+
         cipher = AES.new(cipher_key, AES.MODE_CBC, iv)
+        decrypted = cipher.decrypt(encrypted_payload)
 
-        decrypted = cipher.decrypt(enc_data[:-10])  # Remove MAC
-
+        # Remover padding PKCS#7
         pad_len = decrypted[-1]
+        if pad_len < 1 or pad_len > 16:
+            return jsonify({"error": "Padding inválido na descriptografia"}), 400
         decrypted = decrypted[:-pad_len]
 
+        # Retornar em base64
         base64_media = base64.b64encode(decrypted).decode("utf-8")
 
         return jsonify({
