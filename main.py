@@ -28,9 +28,17 @@ def decode_media():
 
         # Seleção do tipo de mídia
         if mimetype.startswith("image/"):
-            media_type = b'WhatsApp Image Keys'
+            # Verificação especial para stickers (normalmente webp)
+            if mimetype == "image/webp":
+                media_type = b'WhatsApp Sticker Keys'
+            else:
+                media_type = b'WhatsApp Image Keys'
         elif mimetype.startswith("audio/"):
             media_type = b'WhatsApp Audio Keys'
+        elif mimetype.startswith("video/"):
+            media_type = b'WhatsApp Video Keys'
+        elif mimetype.startswith("application/"):
+            media_type = b'WhatsApp Document Keys'
         else:
             return jsonify({"error": f"Tipo de mídia não suportado: {mimetype}"}), 400
 
